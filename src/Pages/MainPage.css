@@ -1,0 +1,22 @@
+#show-data {
+  font-size: 13px;
+  border: solid 1px;
+  border-color: green;
+  padding: 5px;
+  margin: 1px;
+}
+button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.MainPage {
+  width: 100%;
+  overflow: auto;
+}
+#row1 {
+  display: flex;
+  position: sticky;
+}
+h4 {
+  font-size: 14px;
+}

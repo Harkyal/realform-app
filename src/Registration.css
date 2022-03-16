@@ -1,0 +1,51 @@
+.table_data {
+  margin: 10px;
+  width: 200px;
+}
+h3 {
+  font-size: medium;
+}
+h1 {
+  align-items: center;
+  padding-left: 20%;
+}
+h4 {
+  font-size: medium;
+}
+.textbox {
+  width: 200px;
+  height: 100px;
+}
+.button {
+  margin-right: 20%;
+}
+.user_Account {
+  float: right;
+  padding-right: 10%;
+}
+.Container {
+  margin-top: 50px;
+  margin-left: 30px;
+  margin-right: 10px;
+}
+.form_row {
+  display: inline;
+}
+@media screen and (min-width: 415px) {
+  .Container {
+    flex-direction: column;
+  }
+}
+#Hide {
+  display: none;
+}
+.col {
+  width: 10px;
+}
+.col,
+.col-2,
+.col-3 {
+  font-size: 15px;
+  border: solid 1px;
+  border-color: white;
+}

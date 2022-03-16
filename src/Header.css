@@ -1,0 +1,22 @@
+.header {
+  background-color: #8dc73f;
+  display: flex;
+  align-items: center;
+
+  top: 0;
+}
+.header_logo_sm {
+  width: 50%;
+  object-fit: contain;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+.header_logo_lg {
+  width: 50%;
+  object-fit: contain;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  margin-left: 10px;
+}
