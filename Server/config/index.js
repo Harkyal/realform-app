@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const db = require('./db')
 const cors = require('cors');
@@ -9,9 +10,15 @@ const utils = require('./utils');
 
 
 const app = express();
+const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT || 3002;
 app.use(cors());
 app.use(express.json())
+
+app.use(express.static(publicPath));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 var UserName = "";
 
