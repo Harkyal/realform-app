@@ -8,6 +8,7 @@ import './Registration.css';
 
 import Header from './Header';
 import { Operators } from './Part_dataset';
+import Night_registration from './Night_registration';
 
 function Morning_registration(props) {
   const user = getUser();
@@ -30,7 +31,8 @@ function Morning_registration(props) {
   const [Morning_operators, setMorning_operators] = useState([]);
   const [Machine_list, setMachine_list] = useState([]);
   const [part_dataset, setpart_dataset] = useState([]);
-
+  const [Night_operators, setNight_operators] = useState([]);
+  const [Area, setArea] = useState("");
 
   // Hook to update the date as today's date
   useEffect(() => {
@@ -40,29 +42,26 @@ function Morning_registration(props) {
     }
   });
 
+
   // to retreive morning operators
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/get/MorningOperators`).then((data) => {
-      var checkBox = document.getElementById("MorningcheckBox");
+
       setMorning_operators(data.data)
-      if (checkBox.Checked == true) {
-        console.log("Checked");
-      }
-
-
     });
   }, [])
-
-
-
+  // to retreive Night operators
+  useEffect(() => {
+    Axios.get(`http://localhost:3002/api/get/NightOperators`).then((data) => {
+      setNight_operators(data.data)
+    });
+  }, [])
   // to retreive Machines
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/get/Machines`).then((data) => {
       setMachine_list(data.data)
     });
   }, [])
-
-
   // to retreive Machines
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/get/part_dataset`).then((data) => {
@@ -70,32 +69,62 @@ function Morning_registration(props) {
 
     });
   }, [])
+  var Noperators = () => {
+    Axios.get(`http://localhost:3002/api/get/NightOperators`).then((data) => {
+      setMorning_operators(data.data)
 
+    });
+  }
+  // Retreive morning operators
+  var Moperators = () => {
+    Axios.get(`http://localhost:3002/api/get/MorningOperators`).then((data) => {
+      setMorning_operators(data.data)
+    });
+  }
+  // select rigid/flex or all parts
+  const area = () => {
 
+    if (Area == "Rigid") {
+      Axios.get(`http://localhost:3002/api/get/Rigidpart_dataset`).then((data) => {
+        setpart_dataset(data.data)
+      });
+      Axios.get(`http://localhost:3002/api/get/RigidMachines`).then((data) => {
+        setMachine_list(data.data)
+      });
+    }
+    if (Area == "Flex") {
+      Axios.get(`http://localhost:3002/api/get/Flexpart_dataset`).then((data) => {
+        setpart_dataset(data.data)
+      });
+      Axios.get(`http://localhost:3002/api/get/FlexMachines`).then((data) => {
+        setMachine_list(data.data)
+      });
+    }
+    if (Area == "Others") {
+      Axios.get(`http://localhost:3002/api/get/part_dataset`).then((data) => {
+        setpart_dataset(data.data)
+      });
+      Axios.get(`http://localhost:3002/api/get/Machines`).then((data) => {
+        setMachine_list(data.data)
+      });
+    }
+  }
 
-
-  //created the arrays for operator list and part table
-  // created new variable to store the part table data
-  //var [Part_table, setPart_table] = useState(Part_dataset);
-  //console.log(Morning_operators);
-  var [Operator_list, setOperator_list] = useState(Morning_operators);
-
-  //console.log(part_dataset.PartNo);
-
+  // Select machine list as per the Area 
+  const MachineList = () => {
+    console.log("MachineList");
+  }
   // Method to set the value of Operator
   const submitValue2 = (e) => {
     setSelectdd1({ Selectdd1: e.target.value });
     setOperator({ Operator: Morning_operators.find((x) => x.Operator === e.target.value).Operator });
-
   }
   // method for finding the dependent values
   const submitValue = (e) => {
-
     setSelectdd1({ Selectdd1: e.target.value });
     setPart_internalNo({ Part_internalNo: e.target.value });
     //let InternalpartNo = Part_table.find((x) => x.Part_internalNo === e.target.value).Customer;
     //console.log(InternalpartNo);
-
     setCustomer({ Customer: (part_dataset.find((x) => x.Part_internalNo === e.target.value).Customer) });
     setPartNo({ PartNo: part_dataset.find((x) => x.Part_internalNo === e.target.value).PartNo });
     setPart_description({ Part_description: part_dataset.find((x) => x.Part_internalNo === e.target.value).Part_description });
@@ -126,8 +155,6 @@ function Morning_registration(props) {
       Welcome {(user.name).replaceAll('"', '')}!<br /><br />
       <input type="button" class="btn btn-success" onClick={handleLogout} value="Logout" />
     </div>
-
-
     <div>
       <center>
         <h1>Morning shift</h1>
@@ -141,23 +168,33 @@ function Morning_registration(props) {
             </b></label><br />
             <div class="row">
               <div class="col-1">
-                <Link to="/Morning">
-                  <input type="checkbox" id='MorningcheckBox' defaultChecked />
-                  {/*<input type="radio" id="Morning" name="Shift" value="Morning"  />*/}
-                </Link>
+                <input type="radio" name='shift' id='MorningcheckBox' defaultChecked onClick={Moperators} />
+                {/*<input type="radio" id="Morning" name="Shift" value="Morning"  />*/}
               </div>
               <div class="col-5">
                 <label for="html">Morning Shift</label>
               </div>
               <div class="col-1">
-                <Link to="/Night">
-                  <input type="checkbox" />
-                </Link>
+                <input type="radio" name='shift' id='Nights' onClick={Noperators} />
               </div>
-              <div class="col-4">
+              <div class="col-5">
                 <label for="css">Night Shift</label>
               </div>
 
+            </div>
+          </div>
+
+          <div class="col-2">
+            <div class="row">
+              <div class="col">
+                <label><b>
+                  <h4>Date</h4>
+                </b></label>
+                <input type="date" class="form-control form-rounded" placeholder="Date" name="Date" id='date' defaultValue={Date1.toISOString().slice(0, 10)} onChange={(e) => {
+                  setDate2(e.target.value)
+                }} required />
+
+              </div>
             </div>
           </div>
         </div>
@@ -166,30 +203,30 @@ function Morning_registration(props) {
         <div class="row">
           <div class="col">
             <label><b>
-              <h4>Date</h4>
-            </b></label>
-            <input type="date" class="form-control form-rounded" placeholder="Date" name="Date" id='date' defaultValue={Date1.toISOString().slice(0, 10)} onChange={(e) => {
-              setDate2(e.target.value)
-            }} required />
-
-          </div>
-
-          <div class="col">
-            <label><b>
               <h4>Operator</h4>
             </b></label>
-
-            <input type="text" class="form-control form-rounded" list="operatorList"
-              id="operators" onChange={(e) => {
-                setOperator(e.target.value)
-              }} placeholder="Enter Operator" />
+            <input type="text" class="form-control form-rounded" value={submitValue2.Selectdd1} onChange={submitValue2.bind(this)}
+              list="operatorList"
+              id="operators" placeholder="Enter Operator" />
             <datalist id="operatorList">
               <option></option>
               {Morning_operators.map(x => {
-                return <option>{x.Morning_Operators}</option>
+                return <option>{x.Operators}</option>
               })}
             </datalist>
-
+          </div>
+          <div class="col">
+            <label><b>
+              <h4>Area</h4>
+            </b></label>
+            <select type="select" class="form-control form-rounded" id='Area' placeholder="Area" onClick={area} onChange={(e) => {
+              setArea(e.target.value)
+            }} name="area"
+            >
+              <option value="Others">Others</option>
+              <option value="Flex">Flex</option>
+              <option value="Rigid">Rigid</option>
+            </select>
           </div>
 
           <div class="col-2">

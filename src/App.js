@@ -49,7 +49,6 @@ function App() {
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <PrivateRoute path="/Morning" component={Morning_registration} />
-              <PrivateRoute path="/Night" component={Night_registration} />
               <PrivateRoute path="/RetrieveData" component={MainPage} />
             </Switch>
           </div>

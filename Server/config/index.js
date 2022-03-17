@@ -15,10 +15,6 @@ const port = process.env.PORT || 3002;
 app.use(cors());
 app.use(express.json())
 
-app.use(express.static(publicPath));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
 
 var UserName = "";
 
@@ -170,25 +166,24 @@ app.get("/api/get", (req, res) => {
 
 // Route to get Morning operators
 app.get("/api/get/MorningOperators", (req, res) => {
-  db.query("SELECT `Morning_Operators` FROM `operators` ORDER BY Morning_Operators ASC", (err, result) => {
+  db.query("SELECT `Morning_Operators` as Operators FROM `operators` ORDER BY Morning_Operators ASC", (err, result) => {
     if (err) {
       console.log(err)
     }
-
     res.send(result)
   });
 });
 
-// Route to get operators
+// Route to get Night operators
 app.get("/api/get/NightOperators", (req, res) => {
-  db.query("SELECT `Night_Operators` FROM `operators`ORDER BY 'Night_Operators' ASC", (err, result) => {
+  db.query("SELECT `Night_Operators`as Operators FROM `operators`ORDER BY 'Night_Operators' ASC", (err, result) => {
     if (err) {
       console.log(err)
     }
     res.send(result)
   });
 });
-// Route to get operators
+// Route to get operators Combinely
 app.get("/api/get/Operators", (req, res) => {
   db.query("SELECT Morning_Operators FROM Operators UNION SELECT Night_Operators FROM Operators ORDER BY `Morning_Operators` ASC", (err, result) => {
     if (err) {
@@ -197,7 +192,7 @@ app.get("/api/get/Operators", (req, res) => {
     res.send(result)
   });
 });
-// Route to get Customer
+// Route to get all part table
 app.get("/api/get/part_dataset", (req, res) => {
   db.query("SELECT * FROM `part_dataset`", (err, result) => {
     if (err) {
@@ -206,9 +201,48 @@ app.get("/api/get/part_dataset", (req, res) => {
     res.send(result)
   });
 });
+// Route to get all Flex part table
+app.get("/api/get/Flexpart_dataset", (req, res) => {
+  db.query("SELECT * FROM `part_dataset` WHERE `Part_internalNo`LIKE'%F'", (err, result) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send(result)
+  });
+});
+// Route to get all Rigid part table
+app.get("/api/get/Rigidpart_dataset", (req, res) => {
+  db.query("SELECT * FROM `part_dataset` WHERE `Part_internalNo`LIKE'%R'", (err, result) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send(result)
+  });
+});
 
-// Route to get Machine
+
+
+
+// Route to get all Machine
 app.get("/api/get/Machines", (req, res) => {
+  db.query("SELECT `Machines` FROM `operators`", (err, result) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send(result)
+  });
+});
+// Route to get Flex Machine
+app.get("/api/get/FlexMachines", (req, res) => {
+  db.query("SELECT `Machines` FROM `operators`", (err, result) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send(result)
+  });
+});
+// Route to get Rigid Machine
+app.get("/api/get/RigidMachines", (req, res) => {
   db.query("SELECT `Machines` FROM `operators`", (err, result) => {
     if (err) {
       console.log(err)
@@ -225,7 +259,6 @@ app.get("/api/get/Customers", (req, res) => {
     res.send(result)
   });
 });
-
 
 // Route for creating the post
 app.post('/api/create', (req, res) => {
@@ -264,62 +297,16 @@ app.get('/api/defaultData/:date', (req, res) => {
 
   });
 })
-// Filter the data by Operators
-app.get('/api/searchByOperator/:Operator', (req, res) => {
-
-  db.query('SELECT * FROM daily_data_records WHERE Operator=?', [req.params.Operator], (err, result, fields) => {
-    if (err) { throw err; }
-    res.send(result)
-
-  });
-})
 // Filter the data by combinely
 app.get('/api/search/:Operator,:Date1,:Date2,:Customer,:Part_internalNo', (req, res) => {
-
-
   db.query("SELECT * FROM `daily_data_records` WHERE Operator LIKE '%" + ((req.params.Operator).replace(/[{""}]/g, '')) + "%' AND Date BETWEEN '" + req.params.Date1 + "' AND '" + req.params.Date2 + "' AND Customer LIKE '%" + ((req.params.Customer).replace(/[{""}]/g, '')) + "%' AND Part_internalNo LIKE '%" + ((req.params.Part_internalNo).replace(/[{""}]/g, '')) + "%'", (err, result, fields) => {
     if (err) { throw err; }
-    console.log(result);
-    res.send(result)
-
-  });
-})
-// Filter the data Between dates
-//SELECT * FROM `daily_data_records` WHERE Date BETWEEN '2022-02-10' AND '2022-02-11'
-app.get('/api/searchByDates/:Date1,:Date2', (req, res) => {
-  console.log('SEarch dates');
-
-  const date1 = req.params.Date1;
-  const date2 = req.params.Date2;
-  console.log(date1);
-  console.log(date2);
-
-  db.query('SELECT * FROM daily_data_records WHERE Date BETWEEN "' + date1 + '" AND "' + date2 + '" ORDER BY Date', (err, result, fields) => {
-    if (err) { throw err; }
-    console.log(result);
-    res.send(result)
-
-  });
-})
-// Filter the data by Customers
-app.get('/api/searchByCustomer/:Customer', (req, res) => {
-
-  db.query('SELECT * FROM daily_data_records WHERE Customer=? ORDER BY Date', [req.params.Customer], (err, result, fields) => {
-    if (err) { throw err; }
-    res.send(result)
-
-  });
-})
-// Filter the data by Part Internal Numbers
-app.get('/api/searchByPartnumbers/:Part_internalNo', (req, res) => {
-
-  db.query('SELECT * FROM daily_data_records WHERE Part_internalNo=? ORDER BY Date', [req.params.Part_internalNo], (err, result, fields) => {
-    if (err) { throw err; }
 
     res.send(result)
 
   });
 })
+
 
 
 

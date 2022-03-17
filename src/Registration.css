@@ -14,7 +14,7 @@ h4 {
 }
 .textbox {
   width: 200px;
-  height: 100px;
+  height: 70px;
 }
 .button {
   margin-right: 20%;
@@ -48,4 +48,7 @@ h4 {
   font-size: 15px;
   border: solid 1px;
   border-color: white;
+}
+.row {
+  width: 100%;
 }

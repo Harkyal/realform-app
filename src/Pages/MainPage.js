@@ -61,7 +61,7 @@ function MainPage() {
   // method to retrieve data combinely
   const search = () => {
     Axios.get(`http://localhost:3002/api/search/${JSON.stringify(Operator)},${startdate},${enddate},${JSON.stringify(customer)},${JSON.stringify(partInternalNo)}`).then((data) => {
-      console.log(data)
+
       setPostList(data.data)
     })
   }
