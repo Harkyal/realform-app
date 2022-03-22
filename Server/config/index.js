@@ -234,7 +234,7 @@ app.get("/api/get/Machines", (req, res) => {
 });
 // Route to get Flex Machine
 app.get("/api/get/FlexMachines", (req, res) => {
-  db.query("SELECT `Machines` FROM `operators`", (err, result) => {
+  db.query("SELECT `Machines` FROM `operators` WHERE Area='Flex'", (err, result) => {
     if (err) {
       console.log(err)
     }
@@ -243,7 +243,7 @@ app.get("/api/get/FlexMachines", (req, res) => {
 });
 // Route to get Rigid Machine
 app.get("/api/get/RigidMachines", (req, res) => {
-  db.query("SELECT `Machines` FROM `operators`", (err, result) => {
+  db.query("SELECT `Machines` FROM `operators` WHERE Area='Rigid'", (err, result) => {
     if (err) {
       console.log(err)
     }
@@ -263,7 +263,12 @@ app.get("/api/get/Customers", (req, res) => {
 // Route for creating the post
 app.post('/api/create', (req, res) => {
   //Previous query
-  //db.query("INSERT INTO daily_data_records (title, post_text, user_name) VALUES (?,?,?)", [title, text, username], 
+  //db.query("INSERT INTO daily_data_records (title, post_text, user_name) VALUES (?,?,?)", [title, text, username],
+  console.log(req.body.User_name);
+  data2 = req.body.data2;
+  data3 = req.body.data3;
+  data4 = req.body.data4;
+  data5 = req.body.data5;
   const Date = req.body.Date;
   const Operator = req.body.Operator;
   const Part_internalNo = req.body.Part_internalNo;
@@ -276,14 +281,16 @@ app.post('/api/create', (req, res) => {
   const Scrap = req.body.Scrap;
   const Supervisor_notes = req.body.Supervisor_notes;
   const Operator_2 = req.body.Operator_2;
-  db.query("INSERT INTO daily_data_records (Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2],
 
-    (err, result) => {
-      if (err) {
-        console.log(err)
-      }
-      console.log(result)
-    });
+  db.query("INSERT INTO daily_data_records (Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2], (err, result) => { if (err) { console.log() } });
+
+  db.query("INSERT INTO daily_data_records (Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data2, (err, result) => { if (err) { console.log() } });
+
+  db.query("INSERT INTO daily_data_records (Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data3, (err, result) => { if (err) { console.log() } });
+
+  db.query("INSERT INTO daily_data_records (Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data4, (err, result) => { if (err) { console.log() } });
+
+  db.query("INSERT INTO daily_data_records (Date, Operator, Part_internalNo, PartNo, Customer, Part_description, Target, work_station, Produced, Scrap, Supervisor_notes, Operator_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data5, (err, result) => { if (err) { console.log() } });
 })
 app.get("/api/get/name", (req, res) => {
   res.send(Name)

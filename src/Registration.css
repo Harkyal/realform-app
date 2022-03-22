@@ -14,17 +14,17 @@ h4 {
 }
 .textbox {
   width: 200px;
-  height: 70px;
+  height: 50px;
 }
 .button {
-  margin-right: 20%;
+  float: right;
+  margin-right: 5%;
 }
 .user_Account {
   float: right;
-  padding-right: 10%;
 }
 .Container {
-  margin-top: 50px;
+  margin-top: 10px;
   margin-left: 30px;
   margin-right: 10px;
 }
@@ -51,4 +51,15 @@ h4 {
 }
 .row {
   width: 100%;
+}
+datalist,
+option {
+  scroll-behavior: auto;
+  overflow-y: auto;
+}
+.scrollable {
+  overflow-y: auto !important;
+}
+.datalist {
+  overflow-y: auto;
 }
